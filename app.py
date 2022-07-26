@@ -1,30 +1,30 @@
 from getpass import getpass
+import os
 
 
 def cadastrarUsuario():
     usuario = input('Digite o usuario: ')
     senha = getpass('Digite a senha: ')
-    arquivo = open('usuario.txt', 'a')
-    arquivo.write(f'{usuario},')
-    arquivo.write(f'{senha}')
-    arquivo.write(f'\n')
-    arquivo.close()
+    with open('usuario.txt', 'a', newline='') as arquivo:
+        arquivo.write(f'{usuario},')
+        arquivo.write(f'{senha}')
+        arquivo.close()
     print('CADASTRO REALIZADO COM SUCESSO!\n')
 
 def loginUsuario():
     validar = 0
-    arquivo = open('usuario.txt', 'r', encoding='utf-8') 
+    escolher = 'n'
     while True:
         usuario = input('Digite o login: ')
         senha = getpass('Digite a senha do login: ')
-        for linha in arquivo:
-            usu,sen = linha.split(',')
-            print(f'{usu}')
-            print(f'{sen}')
-            if usuario == usu and senha == sen:
-                print('LOGIN REALIZADO COM SUCESSO!')
-                validar = 1
-                break
+        with open('usuario.txt', 'r') as arquivo:
+            for linha in arquivo:
+                usuario_senha = list(linha.split(','))
+            
+                if usuario in usuario_senha and senha in usuario_senha:
+                    print('LOGIN REALIZADO COM SUCESSO!\n')
+                    validar = 1
+
         if validar == 0:
             print('USUARIO NÃO ENCONTRADO OU DADOS DIGITADO INCORRETO!')
             escolher = input('Deseja tentar novamente ? (s/n): ')
@@ -43,11 +43,12 @@ def Linhas():
 
 while True:
    
-    print('SISTEMA DE LOGIN')
+    print('SISTEMA DE LOGIN - Digite "0" para sair')
     print('[1] - EFETUAR O LOGIN')
     print('[2] - REALIZAR O CADASTRO')
     opcao = int(input('Digite a sua opção: '))
-
+    if opcao ==0:
+        break
     if opcao == 1:
         loginUsuario()
     elif opcao == 2:
